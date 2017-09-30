@@ -1,9 +1,7 @@
-from random import randint
 from pprint import pprint
 
 
 class Gol:
-    game_board = []
 
     def __init__(self, x, duration=None):
         self.x = x
@@ -11,21 +9,72 @@ class Gol:
         self._game_board = self._build_board()
 
     def _build_board(self):
-        matrix = [[0 for i in range(self.x)] for i in range(self.x)]
-        return matrix
+        return [[0 for i in range(self.x)] for i in range(self.x)]
 
     def set_start_position(self):
-        row = randint(0,9)
-        col = randint(0,9)
-        self._game_board[row][col] = 1
+        self._game_board[3][5] = 1
+        self._game_board[5][5] = 1
+        self._game_board[4][6] = 1
+        self._game_board[4][7] = 1
+        self._game_board[2][4] = 1
+        self._game_board[2][6] = 1
+        self._game_board[0][5] = 1
+        self._game_board[0][2] = 1
+
+    def _game_logic(self):
+        board = self._game_board
+        for row in range(len(board)):
+            for cell in range(len(board[row])):
+                try:
+                    if board[row][cell] == 0:
+                        if (board[row][cell + 1] == 1 and board[row][cell - 1] == 1):
+                            board[row][cell] = 1
+
+                    if board[row][cell] == 0:
+                        if (board[row][cell + 1] == 1 and board[row + 1][cell] == 1):
+                            board[row][cell] = 1
+
+                    if board[row][cell] == 0:
+                        if (board[row][cell - 1] == 1 and board[row + 1][cell] == 1):
+                            board[row][cell] = 1
+
+                    if board[row][cell] == 0:
+                        if (board[row][cell - 1] == 1 and board[row - 1][cell] == 1):
+                            board[row][cell] = 1
+
+                    if board[row][cell] == 0:
+                        if (board[row][cell + 1] == 1 and board[row - 1][cell] == 1):
+                            board[row][cell] = 1
+
+                    if board[row][cell] == 0:
+                        if (board[row + 1][cell] == 1 and board[row - 1][cell] == 1):
+                            board[row][cell] = 1
+
+                    if board[row][cell] == 1:
+                        if (board[row + 1][cell] == 1 and board[row - 1][cell] == 1)\
+                                and (board[row][cell + 1] == 1 and board[row - 1][cell] == 1) \
+                                and (board[row + 1][cell] == 1 and board[row - 1][cell] == 1) \
+                                and (board[row][cell - 1] == 1 and board[row - 1][cell] == 1) \
+                                and (board[row][cell - 1] == 1 and board[row + 1][cell] == 1) \
+                                and (board[row][cell + 1] == 1 and board[row + 1][cell] == 1) \
+                                and (board[row + 1][cell + 1] == 1 and board[row - 1][cell - 1] == 1) \
+                                and (board[row + 1][cell - 1] == 1 and board[row - 1][cell + 1] == 1):
+                            board[row][cell] = 0
+
+                except:
+                    continue
+            print(board[row])
 
     def run_sim(self):
+        print("Run: 0")
+        pprint(gol._game_board)
         run_num = 0
         while run_num < self.duration:
             print("Run: {}".format(run_num + 1))
-            pprint(self._game_board)
+            self._game_logic()
             run_num += 1
 
-gol = Gol(10, 3)
+gol = Gol(8, 20)
 gol.set_start_position()
+
 gol.run_sim()

@@ -14,52 +14,35 @@ class Gol:
     def set_start_position(self):
         self._game_board[3][5] = 1
         self._game_board[5][5] = 1
-        self._game_board[4][6] = 1
-        self._game_board[4][7] = 1
-        self._game_board[2][4] = 1
-        self._game_board[2][6] = 1
-        self._game_board[0][5] = 1
-        self._game_board[0][2] = 1
 
     def _game_logic(self):
         board = self._game_board
         for row in range(len(board)):
             for cell in range(len(board[row])):
                 try:
-                    if board[row][cell] == 0:
-                        if (board[row][cell + 1] == 1 and board[row][cell - 1] == 1):
-                            board[row][cell] = 1
 
-                    if board[row][cell] == 0:
-                        if (board[row][cell + 1] == 1 and board[row + 1][cell] == 1):
-                            board[row][cell] = 1
+                    neighbour_count = 0
+                    if board[row][cell + 1] == 1:
+                        neighbour_count += 1
+                    if board[row][cell -1] == 1:
+                        neighbour_count += 1
+                    if board[row + 1][cell] ==1:
+                        neighbour_count += 1
+                    if board[row - 1][cell] == 1:
+                        neighbour_count += 1
+                    if board[row - 1][cell -1] == 1:
+                        neighbour_count += 1
+                    if board[row - 1][cell + 1] == 1:
+                        neighbour_count += 1
+                    if board[row + 1][cell -1] == 1:
+                        neighbour_count += 1
+                    if board[row + 1][cell + 1] == 1:
+                        neighbour_count += 1
 
-                    if board[row][cell] == 0:
-                        if (board[row][cell - 1] == 1 and board[row + 1][cell] == 1):
-                            board[row][cell] = 1
-
-                    if board[row][cell] == 0:
-                        if (board[row][cell - 1] == 1 and board[row - 1][cell] == 1):
-                            board[row][cell] = 1
-
-                    if board[row][cell] == 0:
-                        if (board[row][cell + 1] == 1 and board[row - 1][cell] == 1):
-                            board[row][cell] = 1
-
-                    if board[row][cell] == 0:
-                        if (board[row + 1][cell] == 1 and board[row - 1][cell] == 1):
-                            board[row][cell] = 1
-
-                    if board[row][cell] == 1:
-                        if (board[row + 1][cell] == 1 and board[row - 1][cell] == 1)\
-                                and (board[row][cell + 1] == 1 and board[row - 1][cell] == 1) \
-                                and (board[row + 1][cell] == 1 and board[row - 1][cell] == 1) \
-                                and (board[row][cell - 1] == 1 and board[row - 1][cell] == 1) \
-                                and (board[row][cell - 1] == 1 and board[row + 1][cell] == 1) \
-                                and (board[row][cell + 1] == 1 and board[row + 1][cell] == 1) \
-                                and (board[row + 1][cell + 1] == 1 and board[row - 1][cell - 1] == 1) \
-                                and (board[row + 1][cell - 1] == 1 and board[row - 1][cell + 1] == 1):
-                            board[row][cell] = 0
+                    if neighbour_count == 2:
+                        board[row][cell] = 1
+                    if neighbour_count > 3:
+                        board[row][cell] = 0
 
                 except:
                     continue
@@ -74,7 +57,6 @@ class Gol:
             self._game_logic()
             run_num += 1
 
-gol = Gol(8, 20)
+gol = Gol(10, 20)
 gol.set_start_position()
-
 gol.run_sim()

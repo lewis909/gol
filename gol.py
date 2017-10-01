@@ -1,4 +1,4 @@
-
+from pprint import pprint
 
 class Gol:
 
@@ -12,7 +12,11 @@ class Gol:
 
     def set_start_position(self):
         self._game_board[3][5] = 1
+        self._game_board[3][4] = 1
+        self._game_board[3][6] = 1
+        self._game_board[4][6] = 1
         self._game_board[5][5] = 1
+        self._game_board[5][6] = 1
 
     def _game_logic(self):
         board = self._game_board
@@ -38,10 +42,15 @@ class Gol:
                     if board[row + 1][cell + 1] == 1:
                         neighbour_count += 1
 
-                    if neighbour_count == 2 or neighbour_count == 3:
+                    if (neighbour_count == 2 or
+                                neighbour_count == 3) and board[row][cell] == 1:
                         board[row][cell] = 1
-                    if neighbour_count >= 3:
+                    if neighbour_count > 3:
                         board[row][cell] = 0
+                    if neighbour_count < 2:
+                        board[row][cell] = 0
+                    if neighbour_count == 3:
+                        board[row][cell] = 1
 
                 except:
                     continue
@@ -50,11 +59,12 @@ class Gol:
     def run_sim(self):
         print("Run: 0")
         run_num = 0
+        pprint(self._game_board)
         while run_num < self.duration:
             print("Run: {}".format(run_num + 1))
             self._game_logic()
             run_num += 1
 
-gol = Gol(50, 20)
+gol = Gol(20, 200)
 gol.set_start_position()
 gol.run_sim()

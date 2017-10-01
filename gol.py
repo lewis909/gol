@@ -1,4 +1,3 @@
-from pprint import pprint
 
 
 class Gol:
@@ -50,13 +49,12 @@ class Gol:
 
     def run_sim(self):
         print("Run: 0")
-        pprint(gol._game_board)
         run_num = 0
         while run_num < self.duration:
             print("Run: {}".format(run_num + 1))
             self._game_logic()
             run_num += 1
 
-gol = Gol(10, 20)
+gol = Gol(50, 20)
 gol.set_start_position()
 gol.run_sim()

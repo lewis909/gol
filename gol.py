@@ -39,9 +39,9 @@ class Gol:
                     if board[row + 1][cell + 1] == 1:
                         neighbour_count += 1
 
-                    if neighbour_count == 2:
+                    if neighbour_count == 2 or neighbour_count == 3:
                         board[row][cell] = 1
-                    if neighbour_count > 3:
+                    if neighbour_count >= 3:
                         board[row][cell] = 0
 
                 except:

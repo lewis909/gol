@@ -105,10 +105,21 @@ def check_middle_cells(matrix, rn):
         matrix[rn][cn] = check_neighbour(result)
 
 
-def check_bottom_middle_cells(row, matrix, rn):
-    for c, cell in enumerate(row[1:-1]):
-        if cell == 1:
-            row[c + 1] = 1
+def check_bottom_middle_cells(matrix, rn):
+    row = matrix[rn][1:-1]
+    for cn, cell in enumerate(row):
+        result = 0
+        if matrix[rn][cn] == 1:
+            result += 1
+        if matrix[rn][cn + 2] == 1:
+            result += 1
+        if matrix[rn - 1][cn] == 1:
+            result += 1
+        if matrix[rn - 1][cn + 1] == 1:
+            result += 1
+        if matrix[rn - 1][cn + 2] == 1:
+            result += 1
+        row[cn] = check_neighbour(result)
 
 
 def check_right_cell(row, matrix, rn):
@@ -159,7 +170,6 @@ def testing(n):
     t = range(n)
     turn = 0
     while turn < 10000:
-        print(turn)
         for r, row in enumerate(matrix):
 
             if r == t[0]:
@@ -180,7 +190,7 @@ def testing(n):
                 # Check bottom row minus the corners.
 
                 check_bottom_left_cell(row, matrix)
-                check_bottom_middle_cells(row, matrix, r)
+                check_bottom_middle_cells(matrix, r)
                 check_bottom_right_cell(row, matrix, r)
         turn += 1
     return matrix

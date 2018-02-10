@@ -158,7 +158,7 @@ def check_left_cell(matrix, rn):
     matrix[rn][0] = check_neighbour(result)
 
 
-def testing(n):
+def run_game(n):
 
     matrix = [[0 for cell in range(n)] for row in range(n)]
 
@@ -203,4 +203,4 @@ def testing(n):
         pprint(matrix)
     return matrix
 
-testing(10)
+run_game(10)

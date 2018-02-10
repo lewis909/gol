@@ -1,70 +1,147 @@
-from pprint import pprint
+def check_neighbour(result):
+    if result == 2:
+        return 1
+    if result > 2:
+        return 0
+    else:
+        return 0
 
-class Gol:
 
-    def __init__(self, x, duration=None):
-        self.x = x
-        self.duration = duration
-        self._game_board = self._build_board()
+def check_top_left_cell(row, matrix, rn):
+    result = 0
 
-    def _build_board(self):
-        return [[0 for i in range(self.x)] for i in range(self.x)]
+    if matrix[0][1] == 1:
+        result += 1
+    if matrix[rn + 1][1] == 1:
+        result += 1
+    if matrix[rn + 1][0] == 1:
+        result += 1
 
-    def set_start_position(self):
-        self._game_board[3][5] = 1
-        self._game_board[3][4] = 1
-        self._game_board[3][6] = 1
-        self._game_board[4][6] = 1
-        self._game_board[5][5] = 1
-        self._game_board[5][6] = 1
+    row[0] = check_neighbour(result)
 
-    def _game_logic(self):
-        board = self._game_board
-        for row in range(len(board)):
-            for cell in range(len(board[row])):
-                try:
 
-                    neighbour_count = 0
-                    if board[row][cell + 1] == 1:
-                        neighbour_count += 1
-                    if board[row][cell -1] == 1:
-                        neighbour_count += 1
-                    if board[row + 1][cell] ==1:
-                        neighbour_count += 1
-                    if board[row - 1][cell] == 1:
-                        neighbour_count += 1
-                    if board[row - 1][cell -1] == 1:
-                        neighbour_count += 1
-                    if board[row - 1][cell + 1] == 1:
-                        neighbour_count += 1
-                    if board[row + 1][cell -1] == 1:
-                        neighbour_count += 1
-                    if board[row + 1][cell + 1] == 1:
-                        neighbour_count += 1
+def check_top_right_cell(row, matrix, rn):
+    x = len(row) - 1
+    if row[x] == 0:
+        result = 0
 
-                    if (neighbour_count == 2 or
-                                neighbour_count == 3) and board[row][cell] == 1:
-                        board[row][cell] = 1
-                    if neighbour_count > 3:
-                        board[row][cell] = 0
-                    if neighbour_count < 2:
-                        board[row][cell] = 0
-                    if neighbour_count == 3:
-                        board[row][cell] = 1
+        if matrix[0][x - 1] == 1:
+            result += 1
+        if matrix[rn + 1][x - 1] == 1:
+            result += 1
+        if matrix[rn + 1][x] == 1:
+            result += 1
 
-                except:
-                    continue
-            print(board[row])
+        row[x] = check_neighbour(result)
 
-    def run_sim(self):
-        print("Run: 0")
-        run_num = 0
-        pprint(self._game_board)
-        while run_num < self.duration:
-            print("Run: {}".format(run_num + 1))
-            self._game_logic()
-            run_num += 1
 
-gol = Gol(20, 200)
-gol.set_start_position()
-gol.run_sim()
+def check_bottom_left_cell(row, matrix):
+    x = len(row) - 1
+    result = 0
+
+    if matrix[x][1] == 1:
+        result += 1
+    if matrix[x - 1][1] == 1:
+        result += 1
+    if matrix[x - 1][0] == 1:
+        result += 1
+
+    row[0] = check_neighbour(result)
+
+
+def check_bottom_right_cell(row, matrix, rn):
+    x = len(row) - 1
+    y = len(matrix) - 1
+    if row[x] == 0:
+        result = 0
+        if matrix[y][x - 1] == 1:
+            result += 1
+        if matrix[y - 1][x - 1] == 1:
+            result += 1
+        if matrix[y - 1][x - 1] == 1:
+            result += 1
+
+        row[y] = check_neighbour(result)
+
+
+def check_top_middle_cells(row, matrix, rn):
+    for c, cell in enumerate(row[1:-1]):
+        if cell == 1:
+            row[c + 1] = 1
+
+
+def check_middle_cells(row, matrix, rn):
+    for c, cell in enumerate(row[1:-1]):
+        if cell == 1:
+            row[c + 1] = 1
+
+
+def check_bottom_middle_cells(row, matrix, rn):
+    for c, cell in enumerate(row[1:-1]):
+        if cell == 1:
+            row[c + 1] = 1
+
+
+def check_right_cell(row, matrix, rn):
+    if row[0] == 1:
+        row[0] = 1
+
+
+def check_left_cell(row, matrix, rn):
+    x = len(row) - 1
+    if row[x] == 1:
+        row[x] = 1
+
+
+def testing(n):
+
+    matrix = [[0 for cell in range(n)] for row in range(n)]
+    # top left
+    matrix[0][0] = 0
+    matrix[0][1] = 0
+    matrix[1][1] = 1
+    matrix[1][0] = 1
+    # top right
+    matrix[0][9] = 0
+    matrix[1][8] = 1
+    matrix[1][9] = 1
+    matrix[0][8] = 1
+    # bottom left
+    matrix[9][0] = 0
+    matrix[8][1] = 0
+    matrix[8][0] = 1
+    matrix[9][1] = 1
+    # bottom right
+    matrix[9][9] = 0
+    matrix[9][8] = 1
+    matrix[8][9] = 1
+    matrix[8][8] = 1
+
+    t = range(n)
+
+    for r, row in enumerate(matrix):
+
+        if r == t[0]:
+            # Check top row minus the corners.
+
+            check_top_left_cell(row, matrix, r)
+            check_top_middle_cells(row, matrix, r)
+            check_top_right_cell(row, matrix, r)
+
+        # Check rows in the center of the matrix
+        check_left_cell(row, matrix, r)
+        check_middle_cells(row, matrix, r)
+        check_right_cell(row, matrix, r)
+
+        if r == t[-1]:
+
+            # Check bottom row minus the corners.
+
+            check_bottom_left_cell(row, matrix)
+            check_bottom_middle_cells(row, matrix, r)
+            check_bottom_right_cell(row, matrix, r)
+
+    return matrix
+
+for i in testing(10):
+    print(i)

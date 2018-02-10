@@ -65,9 +65,20 @@ def check_bottom_right_cell(row, matrix, rn):
 
 
 def check_top_middle_cells(row, matrix, rn):
-    for c, cell in enumerate(row[1:-1]):
-        if cell == 1:
-            row[c + 1] = 1
+    top_middle = matrix[rn][1:-1]
+    for cn, cell in enumerate(top_middle):
+        result = 0
+        if matrix[rn][cn] == 1:
+            result += 1
+        if matrix[rn][cn + 2] == 1:
+            result += 1
+        if matrix[rn + 1][cn] == 1:
+            result += 1
+        if matrix[rn + 1][cn + 1] == 1:
+            result += 1
+        if matrix[rn + 1][cn + 2] == 1:
+            result += 1
+        top_middle[cn] = check_neighbour(result)
 
 
 def check_middle_cells(row, matrix, rn):
@@ -116,6 +127,11 @@ def testing(n):
     matrix[9][8] = 1
     matrix[8][9] = 1
     matrix[8][8] = 1
+    # top middle
+    matrix[0][5] = 1
+    matrix[1][5] = 1
+    matrix[1][4] = 1
+    matrix[1][6] = 1
 
     t = range(n)
 

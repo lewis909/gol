@@ -102,9 +102,6 @@ def check_middle_cells(matrix, rn):
             result += 1
         if matrix[rn - 1][cn + 2] == 1:
             result += 1
-        #print('row:{}, cell:{}, n:{}, res:{}'.format(rn, cn, result, check_neighbour(result)))
-        '''if rn == 5 and cell == 1:
-            import pdb;pdb.set_trace()'''
         matrix[rn][cn] = check_neighbour(result)
 
 

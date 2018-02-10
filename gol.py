@@ -1,3 +1,6 @@
+from pprint import pprint
+
+
 def check_neighbour(result):
     if result == 2:
         return 1
@@ -22,17 +25,16 @@ def check_top_left_cell(row, matrix, rn):
 
 def check_top_right_cell(row, matrix, rn):
     x = len(row) - 1
-    if row[x] == 0:
-        result = 0
+    result = 0
 
-        if matrix[0][x - 1] == 1:
-            result += 1
-        if matrix[rn + 1][x - 1] == 1:
-            result += 1
-        if matrix[rn + 1][x] == 1:
-            result += 1
+    if matrix[0][x - 1] == 1:
+        result += 1
+    if matrix[rn + 1][x - 1] == 1:
+        result += 1
+    if matrix[rn + 1][x] == 1:
+        result += 1
 
-        row[x] = check_neighbour(result)
+    row[x] = check_neighbour(result)
 
 
 def check_bottom_left_cell(row, matrix):
@@ -123,39 +125,43 @@ def check_bottom_middle_cells(matrix, rn):
 
 
 def check_right_cell(row, matrix, rn):
-    if row[0] == 1:
-        row[0] = 1
-
-
-def check_left_cell(row, matrix, rn):
     x = len(row) - 1
-    if row[x] == 1:
-        row[x] = 1
+    result = 0
+    if matrix[rn - 1][x] == 1:
+        result += 1
+    if matrix[rn - 1][x - 1] == 1:
+        result += 1
+    if matrix[rn][x - 1] == 1:
+        result += 1
+    if matrix[rn + 1][x] == 1:
+        result += 1
+    if matrix[rn + 1][x - 1] == 1:
+        result += 1
+
+    row[x] = check_neighbour(result)
+
+
+def check_left_cell(matrix, rn):
+    result = 0
+
+    if matrix[rn - 1][0] == 1:
+        result += 1
+    if matrix[rn - 1][1] == 1:
+        result += 1
+    if matrix[rn][1] == 1:
+        result += 1
+    if matrix[rn + 1][1] == 1:
+        result += 1
+    if matrix[rn + 1][0] == 1:
+        result += 1
+
+    matrix[rn][0] = check_neighbour(result)
 
 
 def testing(n):
 
     matrix = [[0 for cell in range(n)] for row in range(n)]
-    # top left
-    matrix[0][0] = 0
-    matrix[0][1] = 0
-    matrix[1][1] = 1
-    matrix[1][0] = 1
-    # top right
-    matrix[0][9] = 0
-    matrix[1][8] = 1
-    matrix[1][9] = 1
-    matrix[0][8] = 1
-    # bottom left
-    matrix[9][0] = 0
-    matrix[8][1] = 0
-    matrix[8][0] = 1
-    matrix[9][1] = 1
-    # bottom right
-    matrix[9][9] = 0
-    matrix[9][8] = 1
-    matrix[8][9] = 1
-    matrix[8][8] = 1
+
     # top middle
     matrix[0][5] = 1
     matrix[1][5] = 1
@@ -169,11 +175,11 @@ def testing(n):
 
     t = range(n)
     turn = 0
-    while turn < 10000:
+    while turn < 1500:
         for r, row in enumerate(matrix):
 
             if r == t[0]:
-                # Check top row minus the corners.
+                # Check top row.
 
                 check_top_left_cell(row, matrix, r)
                 check_top_middle_cells(matrix, r)
@@ -181,21 +187,20 @@ def testing(n):
 
             if t[0] < r < t[-1]:
                 # Check rows in the center of the matrix
-                check_left_cell(row, matrix, r)
+                check_left_cell(matrix, r)
                 check_middle_cells(matrix, r)
                 check_right_cell(row, matrix, r)
 
             if r == t[-1]:
 
-                # Check bottom row minus the corners.
+                # Check bottom row.
 
                 check_bottom_left_cell(row, matrix)
                 check_bottom_middle_cells(matrix, r)
                 check_bottom_right_cell(row, matrix, r)
         turn += 1
+        print('turn:{}'.format(turn))
+        pprint(matrix)
     return matrix
 
-print()
-print()
-for i in testing(10):
-    print(i)
+testing(10)

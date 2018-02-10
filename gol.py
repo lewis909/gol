@@ -64,9 +64,9 @@ def check_bottom_right_cell(row, matrix, rn):
         row[y] = check_neighbour(result)
 
 
-def check_top_middle_cells(row, matrix, rn):
-    top_middle = matrix[rn][1:-1]
-    for cn, cell in enumerate(top_middle):
+def check_top_middle_cells(matrix, rn):
+    row = matrix[rn][1:-1]
+    for cn, cell in enumerate(row):
         result = 0
         if matrix[rn][cn] == 1:
             result += 1
@@ -78,13 +78,34 @@ def check_top_middle_cells(row, matrix, rn):
             result += 1
         if matrix[rn + 1][cn + 2] == 1:
             result += 1
-        top_middle[cn] = check_neighbour(result)
+        row[cn] = check_neighbour(result)
 
 
-def check_middle_cells(row, matrix, rn):
-    for c, cell in enumerate(row[1:-1]):
-        if cell == 1:
-            row[c + 1] = 1
+def check_middle_cells(matrix, rn):
+    row = matrix[rn][1:-1]
+    for cn, cell in enumerate(row):
+        result = 0
+        if matrix[rn][cn] == 1:
+            result += 1
+        if matrix[rn][cn + 2] == 1:
+            result += 1
+        if matrix[rn + 1][cn] == 1:
+            result += 1
+        if matrix[rn + 1][cn + 1] == 1:
+            result += 1
+        if matrix[rn + 1][cn + 2] == 1:
+            result += 1
+
+        if matrix[rn - 1][cn] == 1:
+            result += 1
+        if matrix[rn - 1][cn + 1] == 1:
+            result += 1
+        if matrix[rn - 1][cn + 2] == 1:
+            result += 1
+        #print('row:{}, cell:{}, n:{}, res:{}'.format(rn, cn, result, check_neighbour(result)))
+        '''if rn == 5 and cell == 1:
+            import pdb;pdb.set_trace()'''
+        matrix[rn][cn] = check_neighbour(result)
 
 
 def check_bottom_middle_cells(row, matrix, rn):
@@ -132,32 +153,42 @@ def testing(n):
     matrix[1][5] = 1
     matrix[1][4] = 1
     matrix[1][6] = 1
+    # top middle
+    matrix[5][5] = 0
+    matrix[5][0] = 0
+    matrix[5][6] = 1
+    matrix[6][6] = 1
 
     t = range(n)
+    turn = 0
+    while turn < 10000:
+        print(turn)
+        for r, row in enumerate(matrix):
 
-    for r, row in enumerate(matrix):
+            if r == t[0]:
+                # Check top row minus the corners.
 
-        if r == t[0]:
-            # Check top row minus the corners.
+                check_top_left_cell(row, matrix, r)
+                check_top_middle_cells(matrix, r)
+                check_top_right_cell(row, matrix, r)
 
-            check_top_left_cell(row, matrix, r)
-            check_top_middle_cells(row, matrix, r)
-            check_top_right_cell(row, matrix, r)
+            if t[0] < r < t[-1]:
+                # Check rows in the center of the matrix
+                check_left_cell(row, matrix, r)
+                check_middle_cells(matrix, r)
+                check_right_cell(row, matrix, r)
 
-        # Check rows in the center of the matrix
-        check_left_cell(row, matrix, r)
-        check_middle_cells(row, matrix, r)
-        check_right_cell(row, matrix, r)
+            if r == t[-1]:
 
-        if r == t[-1]:
+                # Check bottom row minus the corners.
 
-            # Check bottom row minus the corners.
-
-            check_bottom_left_cell(row, matrix)
-            check_bottom_middle_cells(row, matrix, r)
-            check_bottom_right_cell(row, matrix, r)
-
+                check_bottom_left_cell(row, matrix)
+                check_bottom_middle_cells(row, matrix, r)
+                check_bottom_right_cell(row, matrix, r)
+        turn += 1
     return matrix
 
+print()
+print()
 for i in testing(10):
     print(i)
